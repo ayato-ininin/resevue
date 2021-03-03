@@ -7,7 +7,6 @@
       <p class="title">Login</p>
       </div>
       <div class="form">
-       
         <div class="icon">
         <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email">
         </div>
