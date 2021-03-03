@@ -1,6 +1,12 @@
 <template>
   <div id="app">
     <HeaderAuth />
+    <div class="thanks">
+    <div class="card">
+      <p class="message">会員登録ありがとうございます。</p>
+      <button @click="$router.push('/')">戻る</button>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -15,5 +21,33 @@ export default{
 </script>
 
 <style scoped>
+.thanks{
+  background-color: #ffffff;
+  width: 450px;
+  height: 300px;
+  font-size: 1.4rem;
+  text-align: center;
+  margin: 0 auto;
+  margin-top:90px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.message{
+  display: block;
+  margin-bottom: 40px;
+}
+
+button{
+  background-color: #305DFF;
+  color: #ffffff;
+  border:0px none;
+  cursor: pointer;
+  width: 55px;
+  height: 30px;
+  border-radius: 6px;
+ 
+}
+
 
 </style>

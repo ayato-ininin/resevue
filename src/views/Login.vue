@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <HeaderAuth />
+    <HeaderAuth2 />
   </div>
 </template>
 
 <script>
-import HeaderAuth from "../components/HeaderAuth"
+import HeaderAuth2 from "../components/HeaderAuth2"
 export default{
  components:{
-   HeaderAuth
+   HeaderAuth2
  }
 };
 

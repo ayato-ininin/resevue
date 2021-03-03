@@ -107,4 +107,7 @@ html {
   color: black;
   font-family: "Noto Sans JP";
 }
+*:focus {
+outline: none;
+}
 </style>
