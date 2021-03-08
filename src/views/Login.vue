@@ -89,4 +89,7 @@ height: 30px;
   margin-right: 15px;
 
 }
+* {
+     font-family:'メイリオ', 'Meiryo','ＭＳ ゴシック','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif,'Font Awesome 5 Free' ;
+}
 </style>
