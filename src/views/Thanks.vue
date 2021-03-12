@@ -1,20 +1,20 @@
 <template>
   <div id="app">
-    <HeaderAuth />
+    <HeaderRegister />
     <div class="thanks">
-    <div class="card">
-      <p class="message">会員登録ありがとうございます。</p>
-      <button @click="$router.push('/')">戻る</button>
-    </div>
+      <div class="card">
+        <p class="message">会員登録ありがとうございます。</p>
+        <button @click="$router.push('/')">戻る</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import HeaderAuth from "../components/HeaderAuth"
+import HeaderRegister from "../components/HeaderRegister"
 export default{
  components:{
-   HeaderAuth
+   HeaderRegister
  }
 };
 

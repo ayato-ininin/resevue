@@ -1,27 +1,31 @@
 <template>
-  <div id="app">
-    <HeaderAuth />
-  <div class="content" v-for="(item,index) in shops" :key="index">
-    <div class="name">
-    <div class="return_btn"><i class="fas fa-chevron-left left"></i></div>
-    <h2 class="title">{{item.shopname}}</h2>
-  </div>
-    <div class="picture">
-      <img :src="item.img_url">
+<div id="app">
+  <HeaderRegister />
+  <div class="main">
+    <div class="content" v-for="(item,index) in shops" :key="index">
+
+        <div class="name">
+           <div class="return_btn" @click="$router.push('/')"><i class="fas fa-chevron-left left"></i></div>
+           <h2 class="title">{{item.shopname}}</h2>
+        </div>
+
+        <div class="picture">
+          <img :src="item.img_url">
+        </div>
+        <div class="detail">
+          <p>#{{item.area}} #{{item.genre}}</p>
+        </div>
+        <div class="introduction">
+           {{item.introduction}}
+        </div>
     </div>
-    <div class="detail">
-      <p>#{{item.area}} #{{item.genre}}</p>
-    </div>
-    <div class="introduction">
-      {{item.introduction}}
-    </div>
-  </div>
 
 
-  <div class="reserve">
-     <h2 class="title">予約</h2>
-    <v-calendar :attributes="attrs" ></v-calendar>    
-   
+    <div class="reserve">
+      <h2 class="reserveTitle">予約</h2>
+      <div class="calendar">
+      <DatePicker is-inline v-model="selectDate" />
+      </div>
       <div class="time">
         <select v-model="time">
           <option disabled value="" selected>時間を選択してください</option>
@@ -43,32 +47,65 @@
            <option>4人以上</option>
          </select>
       </div>
-     <div class="contain">
-       <p>Date:{{value}}</p>
-       <p>Time{{time}}</p>
-       <p>Number:{{number}}</p>
-     </div>
-     <button>予約する</button>
+     <div class="contains">
+       <div class="book">
+         <div class="item">
+           <p>Shop</p>
+         </div>
+         <div class="value">
+          <p>叙々苑</p>
+         </div>
+       </div>
+       <div class="book">
+         <div class="item">
+          <p>Date</p>
+         </div>
+         <div class="value">
+          <p>{{fixedDate}}</p>
+         </div>
+       </div>
+       <div class="book">
+         <div class="item">
+           <p>Time</p>
+         </div>
+         <div class="value">
+          <p>{{time}}</p>
+         </div>
+       </div>
+       <div class="book">
+         <div class="item">
+          <p>Number</p>
+         </div>
+         <div class="value">
+          <p>{{number}}</p>
+         </div>
+       </div>
+      </div>
+      <div class="btn">
+         <button>予約する</button>
+      </div>
+    </div>
   </div>
-
-  </div>
+</div>
 </template>
 
 <script>
-import HeaderAuth from "../components/HeaderAuth"
+import HeaderRegister from "../components/HeaderRegister"
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
 
 
 export default{
- components:{
-   HeaderAuth
- },
+  components: {
+    HeaderRegister,
+    DatePicker,
+  },
+
  data(){
    return{
-     time:"",
-     number:"",
-     date:"",
-     
-   shops:[
+     time:"17:00",
+     number:"1人",
+     selectDate: new Date(),
+     shops:[
        {
          id:1,
          shopname:'叙々苑',
@@ -77,9 +114,18 @@ export default{
          img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/yakiniku.jpg',
          introduction:"美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。"
        },
-   ],
+        ],
    
-   };
+      };
+ },
+ computed:{
+   fixedDate(){
+     const day =this.selectDate.getDate()
+     const month =this.selectDate.getMonth()+1
+     const year =this.selectDate.getFullYear()
+
+     return year + "/" + month + "/" + day
+   }
  },
 
 
@@ -88,6 +134,10 @@ export default{
 </script>
 
 <style scoped>
+.main{
+  display: flex;
+  justify-content: center;
+}
 .return_btn {
   
   width: 30px;
@@ -107,10 +157,8 @@ export default{
 .content{
   width: 40%;
   height: 70%;
-
-  position:absolute;
-  top: 150px;
-  left: 100px;
+  margin-top: 100px;
+  margin-right: 110px;
 }
 .name{
   display: flex;
@@ -143,9 +191,60 @@ img{
 .reserve{
   background-color: #305DFF;
   width: 38%;
-  height: 78%;
-  position:absolute;
-  top: 80px;
-  right: 100px;
+  height: 85%;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+overflow: hidden;
+}
+.reserveTitle{
+  color:#ffffff;
+  font-size: 25px;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+
+.calendar{
+  margin-left: 30px;
+  margin-top: 40px;
+}
+select{
+  margin-left: 30px;
+  margin-top: 20px;
+  height: 30px;
+  border-radius: 5px;
+  width: 90%;
+}
+.contains{
+  background-color: #4C7FFF;
+  border-radius: 5px;
+  width: 80%;
+   margin-top: 15px;
+  margin-left: 30px;
+  height: 130px;
+  padding:20px 0 20px 0 ;
+  
+}
+button{
+  width: 100%;
+  color: #ffffff;
+  background-color: #0039FF;
+  border: none;
+  cursor: pointer;
+  height: 50px;
+  border-radius: 0 0 5px 5px;
+}
+.book{
+  display: flex;
+  margin-left: 25px;
+  margin-top: 15px;
+}
+.item p{
+  color: #ffffff;
+}
+.item{
+  width:100px;
+}
+.value p{
+  color: #ffffff;
 }
 </style>

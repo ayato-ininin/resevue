@@ -1,29 +1,28 @@
 <template>
   <div id="app">
-    <HeaderAuth2 />
-    
+    <HeaderLogin />
       <div class="card">
-      <div class="banner">
-      <p class="title">Login</p>
-      </div>
-      <div class="form">
-        <div class="icon">
-        <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email">
+        <div class="banner">
+         <p class="title">Login</p>
         </div>
-        <div class="icon">
-       <font-awesome-icon class="img" icon="lock" /> <input type="text" placeholder="Password">
-       </div>
-        <button>ログイン</button>
+      <div class="form">
+         <div class="icon">
+           <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email">
+         </div>
+         <div class="icon">
+           <font-awesome-icon class="img" icon="lock" /> <input type="text" placeholder="Password">
+         </div>
+         <button>ログイン</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import HeaderAuth2 from "../components/HeaderAuth2"
+import HeaderLogin from "../components/HeaderLogin"
 export default{
  components:{
-   HeaderAuth2
+   HeaderLogin
  }
 };
 

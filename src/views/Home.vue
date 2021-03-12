@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <HeaderAuth />
+    <HeaderRegister />
     <div class="search">
       <div class="area">
-        <select v-model="keyword">
+        <select v-model="area">
           <option value="" selected>All area</option>
           <option>東京都</option>
           <option>大阪府</option>
@@ -11,7 +11,7 @@
         </select>
       </div>
       <div class="genre">
-         <select v-model="keyword2">
+         <select v-model="genre">
            <option value="" selected>All genre</option>
            <option>寿司</option>
            <option>焼肉</option>
@@ -20,8 +20,8 @@
            <option>ラーメン</option>
          </select>
       </div>
-      <div class="cont">
-         <i class="fas fa-search ser"></i><input type="text" v-model="keyword3" placeholder="Search…">
+      <div class="research">
+         <i class="fas fa-search check"></i><input type="text" v-model="research" placeholder="Search…">
       </div>
     </div>
     <div class="flex">
@@ -29,7 +29,7 @@
         <div class="message"><img :src="value.img_url"></div>
         <div class="content">
           <p class="name">{{value.shopname}}</p>
-          <div class="flex2">
+          <div class="flexDetail">
             <p>#{{value.area}}</p>
             <p>#{{value.genre}}</p>
           </div>
@@ -43,16 +43,16 @@
 </template>
 
 <script>
-import HeaderAuth from "../components/HeaderAuth"
+import HeaderRegister from "../components/HeaderRegister"
 export default{
  components:{
-   HeaderAuth
+   HeaderRegister
  },
  data(){
    return{
-     keyword:"",
-     keyword2:"",
-     keyword3:"",
+     area:"",
+     genre:"",
+     research:"",
      shops:[
        {
          id:1,
@@ -104,7 +104,7 @@ export default{
      const usersArray=[];
      for (const i in this.shops){
        const shop = this.shops[i];
-       if(shop.shopname.indexOf(this.keyword3) !== -1 && shop.area.indexOf(this.keyword) !== -1 && shop.genre.indexOf(this.keyword2) !== -1){
+       if(shop.shopname.indexOf(this.research) !== -1 && shop.area.indexOf(this.area) !== -1 && shop.genre.indexOf(this.genre) !== -1){
          usersArray.push(shop);
        }
      }
@@ -146,7 +146,7 @@ export default{
   margin-top: 100px;
 
 }
-.flex2{
+.flexDetail{
   display:flex;
   margin-left: 20px;
   font-size: 0.8rem;
@@ -187,19 +187,19 @@ img{
   /* アイコン色を黒から赤へ変更する */
   color: #e2264d;
 }
-.ser{
+.check{
   font-size: 20px;
    vertical-align: middle;
    margin-top: 5px;
    margin-left: 15px;
    color: #eeeeee;
 }
- select{
+select{
     border: none;
     padding-right: 15px;
     border-right:1px solid #EEEEEE;
   }
-  input{
+input{
   height: 40px;
   border: none;
   margin-top: 3px;
