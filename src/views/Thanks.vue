@@ -4,7 +4,7 @@
     <div class="thanks">
       <div class="card">
         <p class="message">会員登録ありがとうございます。</p>
-        <button @click="$router.push('/')">戻る</button>
+        <button @click="$router.push('/login')">ログインする</button>
       </div>
     </div>
   </div>

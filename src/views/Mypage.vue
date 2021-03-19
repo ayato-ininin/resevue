@@ -2,7 +2,7 @@
   <div id="app">
     <HeaderRegister />
     <div class="user">
-      <p class="userName">{{users}}</p>
+      <p class="userName">{{this.$store.state.user.name}}さん</p>
     </div>
 
     <div class="contain">
@@ -12,7 +12,7 @@
           <div class="flex">
              <i class="far fa-clock clock"></i>
              <p>予約{{index+1}}</p>
-             <i class="far fa-times-circle close"></i>
+             <i class="far fa-times-circle close" @click="del(index)"></i>
           </div>
           <div class="reserveContain">
             <div class="book">
@@ -80,50 +80,15 @@ export default{
  },
  data(){
    return{
-     users:"testさん",
-     shops:[
-       {
-         shop:"麺類",
-         date:"2021/3/8",
-         time:"17:00",
-         number:"1人",
-         shopname:'ひばり',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         shop:"叙々苑",
-         date:"2021/４/8",
-         time:"19:00",
-         number:"3人",
-         shopname:'ひばり',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         shop:"叙々苑",
-         date:"2021/４/8",
-         time:"19:00",
-         number:"3人",
-         shopname:'ひばり',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         shop:"叙々苑",
-         date:"2021/４/8",
-         time:"19:00",
-         number:"3人",
-         shopname:'ひばり',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       }
-     ]
+     shops:[],
    }
+ },
+ methods:{
+  //  del(index){
+  //    axios.delete(
+  //      "https://powerful-hollows-86374.herokuapp.com/api/reservations/" + this.
+  //    )
+  //  }
  }
 };
 

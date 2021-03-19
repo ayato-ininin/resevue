@@ -11,7 +11,7 @@
           <ul>
               <li><a @click="$router.push('/')">Home</a></li>
               <li><a @click="$router.push('/mypage')">Mypage</a></li>
-              <li><a href="#">Logout</a></li>
+              <li><a @click="auth">Logout</a></li>
              
           </ul>
       </div>
@@ -30,6 +30,9 @@ export default{
   methods:{
     Active(){
       this.ActiveBtn=!this.ActiveBtn;
+    },
+    auth(){
+      this.$store.dispatch("logout");
     }
   }
 };
@@ -52,7 +55,7 @@ export default{
   width: 40px;
   height: 40px;
   cursor: pointer;
-  z-index: 50;
+  z-index: 100;
   background-color: #305DFF;
   border-radius: 5px;
   position: relative;
@@ -129,7 +132,7 @@ width: 8px;
 }
 .menu {
   background-color: #ffffff;
-  z-index: 30;
+  z-index: 99;
   padding: 2rem 1rem;
   position: fixed;
   width: 100%;

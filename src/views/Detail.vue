@@ -3,12 +3,12 @@
   <HeaderRegister />
   <div class="main">
     <div class="content" v-for="(item,index) in shops" :key="index">
-
         <div class="name">
-           <div class="return_btn" @click="$router.push('/')"><i class="fas fa-chevron-left left"></i></div>
+           <div class="return_btn" @click="$router.push('/')">
+             <i class="fas fa-chevron-left left"></i>
+           </div>
            <h2 class="title">{{item.shopname}}</h2>
         </div>
-
         <div class="picture">
           <img :src="item.img_url">
         </div>
@@ -82,7 +82,7 @@
        </div>
       </div>
       <div class="btn">
-         <button>予約する</button>
+         <button @click="send">予約する</button>
       </div>
     </div>
   </div>
@@ -92,31 +92,21 @@
 <script>
 import HeaderRegister from "../components/HeaderRegister"
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
-
+import axios from "axios";
 
 export default{
+  props:["id"],
   components: {
     HeaderRegister,
     DatePicker,
   },
-
  data(){
    return{
      time:"17:00",
      number:"1人",
      selectDate: new Date(),
-     shops:[
-       {
-         id:1,
-         shopname:'叙々苑',
-         genre:'焼肉',
-         area:'大阪府',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/yakiniku.jpg',
-         introduction:"美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。美味しいお店があるんです。"
-       },
-        ],
-   
-      };
+     shops:[],
+    };
  },
  computed:{
    fixedDate(){
@@ -127,7 +117,33 @@ export default{
      return year + "/" + month + "/" + day
    }
  },
-
+ methods:{
+   async getShops(){
+     await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + this.id)
+     .then((response)=>{
+       this.shops=response.data;
+       console.log(this.shops);
+     });
+   },
+   async send(){
+     await axios.post("https://powerful-hollows-86374.herokuapp.com/api/reservations",{
+       user_id:this.$store.state.user.id,
+       shop_id:this.id,
+       date:this.fixedDate,
+       time:this.time,
+       number:this.number
+     }).then((response)=>{
+       console.log(response);
+       this.$router.replace("/done");
+     })
+     .catch(error=>{
+       alert(error);
+     });
+   },
+ },
+created(){
+  this.getShops();
+},
 
 };
 

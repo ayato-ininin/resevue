@@ -7,12 +7,12 @@
         </div>
       <div class="form">
          <div class="icon">
-           <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email">
+           <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email" v-model="email">
          </div>
          <div class="icon">
-           <font-awesome-icon class="img" icon="lock" /> <input type="text" placeholder="Password">
+           <font-awesome-icon class="img" icon="lock" /> <input type="text" placeholder="Password" v-model="password">
          </div>
-         <button>ログイン</button>
+         <button @click="auth">ログイン</button>
       </div>
     </div>
   </div>
@@ -23,7 +23,21 @@ import HeaderLogin from "../components/HeaderLogin"
 export default{
  components:{
    HeaderLogin
- }
+ },
+ data(){
+   return{
+     email:"",
+     password:""
+   }
+ },
+methods:{
+  auth(){
+    this.$store.dispatch("login",{
+      email:this.email,
+      password:this.password
+    });
+  }
+}
 };
 
 </script>

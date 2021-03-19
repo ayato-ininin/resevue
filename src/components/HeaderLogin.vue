@@ -31,6 +31,7 @@ export default{
     Active(){
       this.ActiveBtn=!this.ActiveBtn;
     }
+    
   }
 };
 

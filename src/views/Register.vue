@@ -7,15 +7,15 @@
       </div>
       <div class="form">
         <div class="icon">
-          <font-awesome-icon class="img" icon="user" /><input type="text" placeholder="Username">
+          <font-awesome-icon class="img" icon="user" /><input type="text" placeholder="Username" v-model="name">
         </div>
         <div class="icon">
-          <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email">
+          <font-awesome-icon class="img" icon="envelope" /><input type="text" placeholder="Email" v-model="email">
         </div>
         <div class="icon">
-          <font-awesome-icon class="img" icon="lock" /> <input type="text" placeholder="Password">
+          <font-awesome-icon class="img" icon="lock" /> <input type="text" placeholder="Password" v-model="password">
        </div>
-       <button>登録</button>
+       <button @click="auth">登録</button>
       </div>
     </div>
   </div>
@@ -23,9 +23,33 @@
 
 <script>
 import HeaderLogin from "../components/HeaderLogin"
+import axios from "axios";
 export default{
  components:{
    HeaderLogin
+ },
+ data(){
+   return{
+     name:"",
+     email:"",
+     password:""
+   };
+ },
+ methods:{
+   auth(){
+     axios.post("https://powerful-hollows-86374.herokuapp.com/api/register",{
+       name:this.name,
+       email:this.email,
+       password:this.password
+     })
+     .then((response)=>{
+       console.log(response);
+       this.$router.replace("/thanks");
+     })
+     .catch(error=>{
+       alert(error);
+     });
+   }
  }
 };
 

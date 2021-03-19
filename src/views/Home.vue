@@ -34,9 +34,14 @@
             <p>#{{value.genre}}</p>
           </div>
         </div>
-        <button>詳しくみる</button>
+        <button @click="
+              $router.push({
+                path: '/detail/' + value.id,
+                params: { id: value.id },
+              })
+            ">詳しくみる</button>
       
-        <i class="far fa-heart img heart"></i>
+        <i class="far fa-heart img heart" @click="fav(index)"></i>
       </div>
     </div>
   </div>
@@ -44,7 +49,9 @@
 
 <script>
 import HeaderRegister from "../components/HeaderRegister"
+import axios from "axios";
 export default{
+  props:["id"],
  components:{
    HeaderRegister
  },
@@ -53,63 +60,37 @@ export default{
      area:"",
      genre:"",
      research:"",
-     shops:[
-       {
-         id:1,
-         shopname:'叙々苑',
-         genre:'焼肉',
-         area:'大阪府',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/yakiniku.jpg',
-       },
-       {
-         id:2,
-         shopname:'麺類',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         id:2,
-         shopname:'麺類',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         id:2,
-         shopname:'麺類',
-         genre:'ラーメン',
-         area:'名古屋',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         id:2,
-         shopname:'ひばり',
-         genre:'ラーメン',
-         area:'大阪府',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-       {
-         id:2,
-         shopname:'ひばり',
-         genre:'ラーメン',
-         area:'東京都',
-         img_url:'https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg',
-       },
-     ]
+     shops:[]
    };
  },
  computed:{
    filteredUsers(){
      const usersArray=[];
      for (const i in this.shops){
-       const shop = this.shops[i];
+       const shop = this.shops[i].data;
        if(shop.shopname.indexOf(this.research) !== -1 && shop.area.indexOf(this.area) !== -1 && shop.genre.indexOf(this.genre) !== -1){
          usersArray.push(shop);
        }
      }
      return usersArray;
    }
+ },
+ methods:{
+   async getShops(){
+     let data =[];
+     const shops =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops");
+     for(let i =0; i< shops.data.data.length; i++){
+       await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + shops.data.data[i].id,)
+       .then((response)=>{
+        data.push(response.data)
+       });
+     }
+     this.shops = data;
+     console.log(this.shops);
+   },
+ },
+ created(){
+   this.getShops();
  }
 };
 
