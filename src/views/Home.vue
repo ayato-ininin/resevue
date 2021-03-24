@@ -67,7 +67,7 @@ export default{
    filteredUsers(){
      const usersArray=[];
      for (const i in this.shops){
-       const shop = this.shops[i].data;
+       const shop = this.shops[i].data.data;
        if(shop.shopname.indexOf(this.research) !== -1 && shop.area.indexOf(this.area) !== -1 && shop.genre.indexOf(this.genre) !== -1){
          usersArray.push(shop);
        }
@@ -80,13 +80,48 @@ export default{
      let data =[];
      const shops =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops");
      for(let i =0; i< shops.data.data.length; i++){
-       await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + shops.data.data[i].id,)
+       await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + shops.data.data[i].id,{
+          params: {
+            user_id: this.$store.state.user.id,
+          },
+        },
+       )
        .then((response)=>{
-        data.push(response.data)
+        data.push(response)
        });
      }
      this.shops = data;
      console.log(this.shops);
+   },
+   fav(index){
+     const result = this.shops[index].data.like.some((value)=>{
+       return value.user_id == this.$store.state.user.id;
+     });
+     console.log(result);
+     if(result){
+       this.shops[index].data.like.forEach((element)=>{
+         if(element.user_id == this.$store.state.user.id){
+           axios({
+             method:"delete",
+             url:"https://powerful-hollows-86374.herokuapp.com/api/likes",
+             data:{
+               shop_id:this.shops[index].data.data.id,
+               user_id:this.$store.state.user.id,
+             },
+           }).then((response)=>{
+             console.log(response);
+             
+           });
+         }
+       })
+     }else{
+       axios.post("https://powerful-hollows-86374.herokuapp.com/api/likes",{
+         shop_id:this.shops[index].data.data.id,
+         user_id:this.$store.state.user.id,
+       }).then((response)=>{
+         console.log(response);
+       })
+     }
    },
  },
  created(){

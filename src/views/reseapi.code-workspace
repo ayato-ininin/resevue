@@ -1,0 +1,14 @@
+{
+  "folders": [
+	{
+		"path": "../.."
+	},
+	{
+		"path": "../../../rese2-api"
+	},
+	{
+		"path": "../../../habit"
+	}
+],
+  "settings": {}
+}

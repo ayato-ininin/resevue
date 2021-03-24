@@ -54,6 +54,27 @@
       <div class="likes">
         <div> <p class="title">お気に入り店舗</p></div>
         <div class="like">
+          <div class="likeCard" v-for="(value, index) in filteredUsers" :key="index">
+            <div class="message"><img :src="value.img_url"></div>
+            <div class="content">
+            <p class="name">{{value.shopname}}</p>
+            <div class="flexLike">
+              <p>#{{value.area}}</p>
+              <p>#{{value.genre}}</p>
+            </div>
+          </div>
+          <button @click="
+              $router.push({
+                path: '/detail/' + value.id,
+                params: { id: value.id },
+              })
+            ">詳しくみる</button>
+      
+          <i class="far fa-heart img heart" @click="fav(index)"></i>
+        </div>
+     </div>
+   </div>
+          <!-- <div class="like">
            <div class="likeCard" v-for="(value, index) in shops" :key="index">
                <div class="message"><img :src="value.img_url"></div>
                <div class="content">
@@ -66,30 +87,78 @@
                <button>詳しくみる</button>
                <i class="far fa-heart img heart"></i>
            </div>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import HeaderRegister from "../components/HeaderRegister"
+import axios from "axios";
 export default{
  components:{
    HeaderRegister
  },
  data(){
    return{
-     shops:[],
+     shop:[],
+    shops:[],
+
    }
  },
  methods:{
-  //  del(index){
-  //    axios.delete(
-  //      "https://powerful-hollows-86374.herokuapp.com/api/reservations/" + this.
-  //    )
-  //  }
- }
+   async getUser(){
+     let data =[];
+     await axios.get("https://powerful-hollows-86374.herokuapp.com/api/users",{
+       params:{
+         email:this.$store.state.user.email,
+       },
+     })
+     .then((response)=>{
+       data.push(response.data.reserve);
+       data.push(response.data.likes);
+     });
+     this.shop=data;
+     console.log(this.shop);
+   },
+     async getShops(){
+     let data =[];
+     const shops =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops");
+     for(let i =0; i< shops.data.data.length; i++){
+       await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + shops.data.data[i].id,{
+          params: {
+            user_id: this.$store.state.user.id,
+          },
+       },
+       )
+       .then((response)=>{
+        data.push(response)
+       });
+     }
+     this.shops = data;
+     console.log(this.shops);
+     
+   },
+   filteredUsers(){
+     const usersArray=[];
+     for (const i in this.shops){
+       const shop = this.shops[i].data.like;
+       if(shop.user_id.indexOf(this.$store.state.user.id) !== -1){
+         usersArray.push(shop);
+       }
+     }
+     return usersArray;
+     console.log(usersArray);
+   },
+
+ },
+ created(){
+   this.getUser();
+   this.getShops();
+   this.filteredUsers();
+ },
+
 };
 
 </script>
