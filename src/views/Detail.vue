@@ -2,21 +2,21 @@
 <div id="app">
   <HeaderRegister />
   <div class="main">
-    <div class="content" v-for="(item,index) in shops" :key="index">
+    <div class="content">
         <div class="name">
            <div class="return_btn" @click="$router.push('/')">
              <i class="fas fa-chevron-left left"></i>
            </div>
-           <h2 class="title">{{item.shopname}}</h2>
+           <h2 class="title">{{shops.shopname}}</h2>
         </div>
         <div class="picture">
-          <img :src="item.img_url">
+          <img :src="shops.img_url">
         </div>
         <div class="detail">
-          <p>#{{item.area}} #{{item.genre}}</p>
+          <p>#{{shops.area}} #{{shops.genre}}</p>
         </div>
         <div class="introduction">
-           {{item.introduction}}
+           {{shops.introduction}}
         </div>
     </div>
 
@@ -119,14 +119,14 @@ export default{
  },
  methods:{
    async getShops(){
-     await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + this.id)
+     await axios.get("http://127.0.0.1:8000/api/shops/" + this.id)
      .then((response)=>{
-       this.shops=response.data;
+       this.shops=response.data.data;
        console.log(this.shops);
      });
    },
    async send(){
-     await axios.post("https://powerful-hollows-86374.herokuapp.com/api/reservations",{
+     await axios.post("http://127.0.0.1:8000/api/reservations",{
        user_id:this.$store.state.user.id,
        shop_id:this.id,
        date:this.fixedDate,
@@ -229,6 +229,7 @@ select{
   height: 30px;
   border-radius: 5px;
   width: 90%;
+  background-color: #fff;
 }
 .contains{
   background-color: #4C7FFF;

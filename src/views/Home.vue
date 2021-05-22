@@ -40,8 +40,7 @@
                 params: { id: value.id },
               })
             ">詳しくみる</button>
-      
-        <i class="far fa-heart img heart" @click="fav(index)"></i>
+        <i class="fa-heart img heart" v-bind:class='{far:!value.result,fas:value.result}' @click="fav(index)"></i>
       </div>
     </div>
   </div>
@@ -60,14 +59,14 @@ export default{
      area:"",
      genre:"",
      research:"",
-     shops:[]
+     shops:[],
    };
  },
  computed:{
    filteredUsers(){
      const usersArray=[];
      for (const i in this.shops){
-       const shop = this.shops[i].data.data;
+       const shop = this.shops[i];
        if(shop.shopname.indexOf(this.research) !== -1 && shop.area.indexOf(this.area) !== -1 && shop.genre.indexOf(this.genre) !== -1){
          usersArray.push(shop);
        }
@@ -77,50 +76,54 @@ export default{
  },
  methods:{
    async getShops(){
-     let data =[];
-     const shops =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops");
-     for(let i =0; i< shops.data.data.length; i++){
-       await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + shops.data.data[i].id,{
-          params: {
-            user_id: this.$store.state.user.id,
-          },
-        },
-       )
-       .then((response)=>{
-        data.push(response)
-       });
-     }
-     this.shops = data;
-     console.log(this.shops);
-   },
-   fav(index){
-     const result = this.shops[index].data.like.some((value)=>{
-       return value.user_id == this.$store.state.user.id;
+
+     const shops =await axios.get("http://127.0.0.1:8000/api/shops");
+     
+   
+    for(let i=0;i<shops.data.data.length;i++){
+        console.log(shops);
+        const result =await axios.get("http://127.0.0.1:8000/api/likes/check",{
+       params:{
+         shop_id:shops.data.data[i].id,
+         user_id:this.$store.state.user.id,
+       },
+     
+    
      });
      console.log(result);
-     if(result){
-       this.shops[index].data.like.forEach((element)=>{
-         if(element.user_id == this.$store.state.user.id){
+     shops.data.data[i].result=result.data.data
+
+    }
+       
+     this.shops = shops.data.data;
+     console.log(this.shops);
+   },
+   async fav(index){
+     
+     console.log(this.shops[index]);
+     if(this.shops[index].result){
            axios({
              method:"delete",
-             url:"https://powerful-hollows-86374.herokuapp.com/api/likes",
+             url:"http://127.0.0.1:8000/api/likes",
              data:{
-               shop_id:this.shops[index].data.data.id,
+               shop_id:this.shops[index].id,
                user_id:this.$store.state.user.id,
              },
            }).then((response)=>{
+             this.shops[index].result=false
              console.log(response);
-             
            });
-         }
-       })
+        
      }else{
-       axios.post("https://powerful-hollows-86374.herokuapp.com/api/likes",{
-         shop_id:this.shops[index].data.data.id,
+       axios.post("http://127.0.0.1:8000/api/likes",{
+         shop_id:this.shops[index].id,
          user_id:this.$store.state.user.id,
        }).then((response)=>{
+         this.shops[index].result=true
          console.log(response);
        })
+     
+       
      }
    },
  },
@@ -132,6 +135,7 @@ export default{
 </script>
 
 <style scoped>
+
 .search{
   position: absolute; 
   top: 45px;
@@ -214,6 +218,7 @@ select{
     border: none;
     padding-right: 15px;
     border-right:1px solid #EEEEEE;
+    background-color: #fff;
   }
 input{
   height: 40px;
@@ -221,6 +226,7 @@ input{
   margin-top: 3px;
   font-size: 15px;
   margin-left: 15px;
+  
 }
 .area{
   margin-top: 14px;

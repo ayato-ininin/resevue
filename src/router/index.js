@@ -7,7 +7,7 @@ import Login from '../views/Login.vue'
 import Mypage from '../views/Mypage.vue'
 import Done from '../views/Done.vue'
 import Detail from '../views/Detail.vue'
-import store from "../store/index";
+// import store from "../store/index";
 
 Vue.use(VueRouter)
 
@@ -16,9 +16,9 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: {
-      requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
   },
   {
     path: '/register',
@@ -39,26 +39,26 @@ const routes = [
     path: '/mypage',
     name: 'Mypage',
     component: Mypage,
-    meta: {
-      requiresAuth:true,
-    },
+    // meta: {
+    //   requiresAuth:true,
+    // },
   },
   {
     path: '/done',
     name: 'Done',
     component: Done,
-    meta: {
-      requiresAuth:true,
-    },
+    // meta: {
+    //   requiresAuth:true,
+    // },
   },
   {
     path: '/detail/:id',
     name: 'Detail',
     component: Detail,
     props: true,
-    meta: {
-      requiresAuth:true,
-    },
+    // meta: {
+    //   requiresAuth:true,
+    // },
   },
 ]
 
@@ -67,19 +67,19 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-router.beforeEach((to, from, next) => {
-  if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.state.auth
-  ) {
-    next({
-      path: "/",
-      query: {
-        redirect: to.fullPath,
-      },
-    });
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (
+//     to.matched.some((record) => record.meta.requiresAuth) &&
+//     !store.state.auth
+//   ) {
+//     next({
+//       path: "/",
+//       query: {
+//         redirect: to.fullPath,
+//       },
+//     });
+//   } else {
+//     next();
+//   }
+// });
 export default router;

@@ -8,11 +8,11 @@
     <div class="contain">
       <div class="reserve">
         <p class="title">予約状況</p>
-        <div class="reserveCard" v-for="(reserve,index) in shops" :key="index">
+        <div class="reserveCard" v-for="(reserve,index) in reserveShops" :key="index">
           <div class="flex">
              <i class="far fa-clock clock"></i>
              <p>予約{{index+1}}</p>
-             <i class="far fa-times-circle close" @click="del(index)"></i>
+             <i class="far fa-times-circle close" @click="del(reserve)"></i>
           </div>
           <div class="reserveContain">
             <div class="book">
@@ -20,7 +20,7 @@
                   <p>Shop</p>
                </div>
                <div class="value">
-                  <p>{{reserve.shop}}</p>
+                  <p>{{reserve[0].data.data.shopname}}</p>
               </div>
             </div>
             <div class="book">
@@ -28,7 +28,7 @@
                   <p>Date</p>
                </div>
                <div class="value">
-                  <p>{{reserve.date}}</p>
+                  <p>{{reserve[1].date}}</p>
               </div>
             </div>
             <div class="book">
@@ -36,7 +36,7 @@
                   <p>Time</p>
                </div>
                <div class="value">
-                  <p>{{reserve.time}}</p>
+                  <p>{{reserve[1].time}}</p>
               </div>
             </div>
             <div class="book">
@@ -44,7 +44,7 @@
                   <p>Number</p>
                </div>
                <div class="value">
-                  <p>{{reserve.number}}</p>
+                  <p>{{reserve[1].number}}</p>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@
       <div class="likes">
         <div> <p class="title">お気に入り店舗</p></div>
         <div class="like">
-          <div class="likeCard" v-for="(value, index) in filteredUsers" :key="index">
+          <div class="likeCard" v-for="(value, index) in likesShops" :key="index">
             <div class="message"><img :src="value.img_url"></div>
             <div class="content">
             <p class="name">{{value.shopname}}</p>
@@ -74,21 +74,6 @@
         </div>
      </div>
    </div>
-          <!-- <div class="like">
-           <div class="likeCard" v-for="(value, index) in shops" :key="index">
-               <div class="message"><img :src="value.img_url"></div>
-               <div class="content">
-                  <p class="name">{{value.shopname}}</p>
-                  <div class="flexLike">
-                     <p>#{{value.area}}</p>
-                     <p>#{{value.genre}}</p>
-                  </div>
-               </div>
-               <button>詳しくみる</button>
-               <i class="far fa-heart img heart"></i>
-           </div>
-        </div> -->
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -102,61 +87,75 @@ export default{
  },
  data(){
    return{
-     shop:[],
-    shops:[],
+    reserveShops:[],
+    
+    likesShops:[],
 
    }
  },
  methods:{
-   async getUser(){
-     let data =[];
-     await axios.get("https://powerful-hollows-86374.herokuapp.com/api/users",{
+   async getReservations(){
+     let contain =[];
+     
+     const book=await axios.get("http://127.0.0.1:8000/api/reservations/shops",{
        params:{
-         email:this.$store.state.user.email,
+         user_id:this.$store.state.user.id,
        },
-     })
-     .then((response)=>{
-       data.push(response.data.reserve);
-       data.push(response.data.likes);
      });
-     this.shop=data;
-     console.log(this.shop);
+     for (let i=0;i<book.data.data.length;i++){
+       const UserShopData=book.data.data[i];
+       const shop=UserShopData.shop_id;
+       const user=UserShopData.user_id;
+       const UserShopDetail=await axios.get("http://127.0.0.1:8000/api/shops/"+shop,{
+       params:{
+         user_id:user,
+         shop_id:shop
+       },
+       });
+      let Data=[];
+      Data.push(UserShopDetail)
+      Data.push(UserShopData);
+      
+     contain.push(Data);
+       
+     }
+     
+     this.reserveShops=contain;
+     console.log(this.reserveShops);
+     
    },
      async getShops(){
      let data =[];
-     const shops =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops");
-     for(let i =0; i< shops.data.data.length; i++){
-       await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + shops.data.data[i].id,{
-          params: {
-            user_id: this.$store.state.user.id,
-          },
-       },
-       )
-       .then((response)=>{
-        data.push(response)
-       });
+     const shops=await axios.get("http://127.0.0.1:8000/api/likes/shops",{
+       params:{
+         user_id:this.$store.state.user.id
+     },
+     });
+     for(let i = 0;i<shops.data.data.length;i++){
+       const content =shops.data.data[i];
+        data.push(content)
      }
-     this.shops = data;
-     console.log(this.shops);
+  
+     this.likesShops = data;
+     console.log(this.likesShops);
      
    },
-   filteredUsers(){
-     const usersArray=[];
-     for (const i in this.shops){
-       const shop = this.shops[i].data.like;
-       if(shop.user_id.indexOf(this.$store.state.user.id) !== -1){
-         usersArray.push(shop);
-       }
-     }
-     return usersArray;
-     console.log(usersArray);
+   del(reserve){
+     console.log(reserve);
+     axios.delete("http://127.0.0.1:8000/api/reservations?id=" +reserve[1].id)
+     .then((response)=>{
+       console.log(response);
+       this.$router.go({
+         path:this.$router.currentRoute.path,
+         force:true,
+       });
+     });
    },
-
+   
  },
  created(){
-   this.getUser();
+   this.getReservations();
    this.getShops();
-   this.filteredUsers();
  },
 
 };
