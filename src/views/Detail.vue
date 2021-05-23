@@ -119,14 +119,14 @@ export default{
  },
  methods:{
    async getShops(){
-     await axios.get("http://127.0.0.1:8000/api/shops/" + this.id)
+     await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/" + this.id)
      .then((response)=>{
        this.shops=response.data.data;
        console.log(this.shops);
      });
    },
    async send(){
-     await axios.post("http://127.0.0.1:8000/api/reservations",{
+     await axios.post("https://powerful-hollows-86374.herokuapp.com/api/reservations",{
        user_id:this.$store.state.user.id,
        shop_id:this.id,
        date:this.fixedDate,

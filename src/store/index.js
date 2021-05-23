@@ -35,14 +35,14 @@ export default new Vuex.Store({
   actions: {
     async login({ commit }, { email, password }) {
       const responseLogin = await axios.post(
-        "http://127.0.0.1:8000/api/login",
+        "https://powerful-hollows-86374.herokuapp.com/api/login",
         {
           email: email,
           password: password,
         }
       );
       const responseUser = await axios.get(
-        "http://127.0.0.1:8000/api/users",
+        "https://powerful-hollows-86374.herokuapp.com/api/users",
         {
           params: {
             email: email,
@@ -60,7 +60,7 @@ export default new Vuex.Store({
       router.replace("/");
     },
     logout({ commit }) {
-      axios.post("http://127.0.0.1:8000/api/logout", {
+      axios.post("https://powerful-hollows-86374.herokuapp.com/api/logout", {
         auth: this.state.auth,
       })
         .then((response) => {

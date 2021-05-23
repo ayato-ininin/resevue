@@ -37,7 +37,7 @@ export default{
  },
  methods:{
    auth(){
-     axios.post("http://127.0.0.1:8000/api/register",{
+     axios.post("https://powerful-hollows-86374.herokuapp.com/api/register",{
        name:this.name,
        email:this.email,
        password:this.password

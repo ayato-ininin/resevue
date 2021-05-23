@@ -70,7 +70,8 @@
               })
             ">詳しくみる</button>
       
-          <i class="far fa-heart img heart" @click="fav(index)"></i>
+          <i class="far fa-heart img heart"></i>
+          <!-- <i class="far fa-heart img heart" @click="fav(index)"></i> -->
         </div>
      </div>
    </div>
@@ -97,7 +98,7 @@ export default{
    async getReservations(){
      let contain =[];
      
-     const book=await axios.get("http://127.0.0.1:8000/api/reservations/shops",{
+     const book=await axios.get("https://powerful-hollows-86374.herokuapp.com/api/reservations/shops",{
        params:{
          user_id:this.$store.state.user.id,
        },
@@ -106,7 +107,7 @@ export default{
        const UserShopData=book.data.data[i];
        const shop=UserShopData.shop_id;
        const user=UserShopData.user_id;
-       const UserShopDetail=await axios.get("http://127.0.0.1:8000/api/shops/"+shop,{
+       const UserShopDetail=await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops/"+shop,{
        params:{
          user_id:user,
          shop_id:shop
@@ -126,7 +127,7 @@ export default{
    },
      async getShops(){
      let data =[];
-     const shops=await axios.get("http://127.0.0.1:8000/api/likes/shops",{
+     const shops=await axios.get("https://powerful-hollows-86374.herokuapp.com/api/likes/shops",{
        params:{
          user_id:this.$store.state.user.id
      },
@@ -140,9 +141,37 @@ export default{
      console.log(this.likesShops);
      
    },
+   async fav(index){
+     
+     console.log(this.shops[index]);
+     if(this.shops[index].result){
+           axios({
+             method:"delete",
+             url:"https://powerful-hollows-86374.herokuapp.com/api/likes",
+             data:{
+               shop_id:this.shops[index].id,
+               user_id:this.$store.state.user.id,
+             },
+           }).then((response)=>{
+             this.shops[index].result=false
+             console.log(response);
+           });
+        
+     }else{
+       axios.post("https://powerful-hollows-86374.herokuapp.com/api/likes",{
+         shop_id:this.shops[index].id,
+         user_id:this.$store.state.user.id,
+       }).then((response)=>{
+         this.shops[index].result=true
+         console.log(response);
+       })
+     
+       
+     }
+   },
    del(reserve){
      console.log(reserve);
-     axios.delete("http://127.0.0.1:8000/api/reservations?id=" +reserve[1].id)
+     axios.delete("https://powerful-hollows-86374.herokuapp.com/api/reservations?id=" +reserve[1].id)
      .then((response)=>{
        console.log(response);
        this.$router.go({

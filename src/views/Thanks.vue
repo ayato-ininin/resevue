@@ -43,7 +43,7 @@ button{
   color: #ffffff;
   border:0px none;
   cursor: pointer;
-  width: 55px;
+  width: 100px;
   height: 30px;
   border-radius: 6px;
  

@@ -77,12 +77,12 @@ export default{
  methods:{
    async getShops(){
 
-     const shops =await axios.get("http://127.0.0.1:8000/api/shops");
+     const shops =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/shops");
      
    
     for(let i=0;i<shops.data.data.length;i++){
         console.log(shops);
-        const result =await axios.get("http://127.0.0.1:8000/api/likes/check",{
+        const result =await axios.get("https://powerful-hollows-86374.herokuapp.com/api/likes/check",{
        params:{
          shop_id:shops.data.data[i].id,
          user_id:this.$store.state.user.id,
@@ -104,7 +104,7 @@ export default{
      if(this.shops[index].result){
            axios({
              method:"delete",
-             url:"http://127.0.0.1:8000/api/likes",
+             url:"https://powerful-hollows-86374.herokuapp.com/api/likes",
              data:{
                shop_id:this.shops[index].id,
                user_id:this.$store.state.user.id,
@@ -115,7 +115,7 @@ export default{
            });
         
      }else{
-       axios.post("http://127.0.0.1:8000/api/likes",{
+       axios.post("https://powerful-hollows-86374.herokuapp.com/api/likes",{
          shop_id:this.shops[index].id,
          user_id:this.$store.state.user.id,
        }).then((response)=>{
