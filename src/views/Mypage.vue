@@ -174,10 +174,11 @@ export default{
      axios.delete("https://powerful-hollows-86374.herokuapp.com/api/reservations?id=" +reserve[1].id)
      .then((response)=>{
        console.log(response);
-       this.$router.go({
-         path:this.$router.currentRoute.path,
-         force:true,
-       });
+       this.$router.replace("/mypage");
+      //  this.$router.go({
+      //    path:this.$router.currentRoute.path,
+      //    force:true,
+      //  });
      });
    },
    
